@@ -27,5 +27,5 @@ You can see the AeroEssence topic on powerbot [here](http://powerbot.org)!
 
 #Version Log
 
-###1.0 (7-6-2016)
+#####1.0
 - initial release!
