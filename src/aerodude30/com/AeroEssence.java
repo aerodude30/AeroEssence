@@ -16,6 +16,8 @@ import java.util.concurrent.Callable;
 
 /**
  * Created by cbartram on 7/6/2016.
+ * todo make sure if the client misclicks and ends on the second floor of the bank that it knows the traverse back
+ * to the first floor where the bankers are located. 
  */
 @Script.Manifest(name = "AeroEssence", properties = "author=aerodude30; topic=1296203; client=4;", description = "Mines Rune Essence in east Varrock mine. Supports Bronze-dragon pickaxes.")
 public class AeroEssence extends PollingScript<ClientContext> implements PaintListener {
