@@ -1,5 +1,8 @@
 package aerodude30.com;
 
+import aerodude30.com.controller.Actionable;
+import aerodude30.com.controller.JSB;
+import aerodude30.com.view.GUI;
 import org.powerbot.script.Area;
 import org.powerbot.script.Condition;
 import org.powerbot.script.PaintListener;
@@ -14,13 +17,14 @@ import org.powerbot.script.rt4.GameObject;
 import org.powerbot.script.rt4.Npc;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.concurrent.Callable;
 
 /**
  * Created by cbartram on 7/6/2016.
  *
  */
-@Script.Manifest(name = "AeroEssence V2", properties = "author=aerodude30; topic=1296203; client=4;", description = "Mines Rune Essence in east Varrock mine. Supports Bronze-dragon pickaxes.")
+@Script.Manifest(name = "AeroEssence", properties = "author=aerodude30; topic=1296203; client=4;", description = "Mines Rune Essence in east Varrock mine. Supports Bronze-dragon pickaxes.")
 public class AeroEssence extends PollingScript<ClientContext> implements PaintListener {
 
     public Controller controller = ctx.controller;
@@ -47,12 +51,14 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
     //Class instances
     private Random rnd = new Random();
     private Util util = new Util();
+    private JSB jsb = new JSB();
 
     //enums for each state in the script
     private enum State {BANK, TRAVERSE, TELEPORT, MINE, REVERSE, STUCK}
 
     private State getState() {
-        //if the player has a pickaxe in their inventory, or equipped, and their backpack does not have Rune ess, and they are standing in the bank
+        //if the player has a pickaxe in their inventory, or equipped, and their backpack does not have Rune ess, and the portal to leave the rune essence area is not in view
+        // and there is a distance between the players tile and that of the Aubury's hut area.
         if((ctx.inventory.select().id(PICKAXE).count() == 1 || ctx.equipment.itemAt(Slot.MAIN_HAND).id() == PICKAXE[0]) &&
                 ctx.inventory.select().id(RUNE_ESSENCE).count() == 0 &&
                 !ctx.objects.select().id(PORTAL).poll().inViewport() && ctx.movement.distance(ctx.players.local().tile(), rndTile) > 3) {
@@ -75,12 +81,39 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
         return ctx.inventory.select().id(RUNE_ESSENCE).count() == 28 || ctx.inventory.select().id(RUNE_ESSENCE).count() == 27 ? State.REVERSE : State.MINE;
     }
 
+    private void customAction() {
+        if(ctx.players.local().inCombat()) {
+            //run from mugger
+        }
+    }
 
+    public void actionBank() {
+        //this.state = State.BANK;
+    }
 
     @Override
     public void start() {
         startTime = System.currentTimeMillis();
         startExperience = ctx.skills.experience(14);
+        GUI g = new GUI();
+        g.pack();
+        g.setVisible(true);
+
+        try {
+            jsb.initialize("AeroEssence", "1.0", status, g.username.getText(), g.email.getText(), "")
+                    .actionListener(new Actionable() {
+                        @Override
+                        public void customScriptAction() {
+                            customAction();
+                        }
+                    }, "Flee from Mugger")
+                    .sendData()
+                    .onStop(true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

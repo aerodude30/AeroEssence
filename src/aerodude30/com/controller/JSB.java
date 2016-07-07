@@ -312,7 +312,7 @@ public class JSB implements aerodude30.com.controller.Actionable {
                                 break;
                             case "bank":
                                 System.err.println("[ACTION] Bank Items");
-                                bank();
+                                aeroEssence.actionBank();
                                 break;
                             case "custom":
                                 System.err.println("[ACTION] Custom Script Action");
