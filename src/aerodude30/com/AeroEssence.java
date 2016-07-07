@@ -9,6 +9,7 @@ import org.powerbot.script.Script;
 import org.powerbot.script.Tile;
 import org.powerbot.script.rt4.Bank;
 import org.powerbot.script.rt4.ClientContext;
+import org.powerbot.script.rt4.Equipment.Slot;
 import org.powerbot.script.rt4.Npc;
 
 import java.awt.*;
@@ -24,21 +25,14 @@ import java.util.concurrent.Callable;
 public class AeroEssence extends PollingScript<ClientContext> implements PaintListener {
 
     public Controller controller = ctx.controller;
-    private Area varrockBank = new Area(new Tile(3250, 3245), new Tile(3258, 3416));
-    private Area auburyHut = new Area(new Tile(3251, 3405), new Tile(3254, 3399));
+    private Area varrockBank = new Area(new Tile(3250, 3422, 0), new Tile(3257, 3422, 0), new Tile(3257, 3420, 0), new Tile(3250, 3420, 0));
+    private Area AUBURY_HUT = new Area(new Tile(3252, 3404, 0), new Tile(3254, 3401, 0), new Tile(3253, 3399, 0), new Tile(3252, 3399, 0));
     private static final int[] PICKAXE = {1265, 1267, 1269, 1271, 1273, 1275, 15259};
     private static final Tile[] pathToAubury = {
-            new Tile(3254, 3421, 0),
-            new Tile(3254, 3426, 0),
-            new Tile(3256, 3428, 0),
-            new Tile(3260, 3430, 0),
-            new Tile(3263, 3417, 0),
-            new Tile(3258, 3408, 0),
-            new Tile(3256, 3399, 0),
-            new Tile(3253, 3402, 0)
+            new Tile(3253, 3404, 0)
     };
 
-    private static final int RUNE_ESSENCE = 1436, AUBURY_DOOR = 9999, AUBURY_NPC = 9999;//todo change to door id
+    private static final int RUNE_ESSENCE = 1436, AUBURY_DOOR_OPEN = 11778, AUBURY_DOOR_CLOSED = 11780, AUBURY_NPC = 637, PORTAL = 7475, RUNE_ESSENCE_ROCK = 7471;//todo change to door id
     private long startTime;
     private String status = "Waiting to start...";
     private int startExperience = 0;
@@ -51,19 +45,17 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
     private enum State {BANK, TRAVERSE, MINE, REVERSE}
 
     private State getState() {
+        //if the player has a pickaxe in their inventory, or equipped, and their backpack does not have Rune ess, and they are standing in the bank
+        if((ctx.inventory.select().id(PICKAXE).count() == 1 || ctx.equipment.itemAt(Slot.MAIN_HAND).id() == PICKAXE[0]) &&
+                !ctx.inventory.select().contains(ctx.inventory.select().id(RUNE_ESSENCE).poll()) &&
+                varrockBank.contains(ctx.players.local().tile())) {
+            return State.TRAVERSE;
+        }
 
         //if player is in the bank and they have more than one rune essence
         if(varrockBank.contains(ctx.players.local().tile()) && ctx.inventory.select().id(RUNE_ESSENCE).count() >= 1) {
             return State.BANK;
         }
-
-        //if the player has a pickaxe in their inventory, or equipped, their backpack does not have Rune ess, and they are standing in the bank
-        if((ctx.inventory.select().id(PICKAXE).count() == 1 || ctx.equipment.select().id(PICKAXE).count() == 1) &&
-                !ctx.inventory.select().contains(ctx.inventory.select().id(RUNE_ESSENCE).poll()) &&
-                 varrockBank.contains(ctx.players.local().tile())) {
-                return State.TRAVERSE;
-        }
-
         //if player has a full inventory of rune essence or a full inventory - 1 because of the pickaxe in their inventory
         if(ctx.inventory.select().id(RUNE_ESSENCE).count() == 28 || ctx.inventory.select().id(RUNE_ESSENCE).count() == 27) {
             return State.REVERSE;
@@ -84,12 +76,12 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
     @Override
     public void poll() {
         State state = getState();
-
+        System.out.println(state);
         switch(state) {
             case BANK:
                 status = "Banking...";
                 if(ctx.bank.inViewport() && !ctx.bank.opened()) {
-                    ctx.camera.turnTo(ctx.npcs.select().id(2897).shuffle().poll());
+                    ctx.camera.turnTo(ctx.npcs.select().id(2897, 2898).shuffle().poll());
 
                     //Anti-Pattern Feature to sometimes choose to open the bank booth and sometimes choose to interact with the banker himself
                     Boolean bankOrBanker = Random.nextBoolean();
@@ -111,20 +103,26 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
                 }
                     break;
             case TRAVERSE:
+                status = "Walking to Aubury";
+                ctx.movement.newTilePath(pathToAubury).traverse();
+
                 Condition.wait(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
-                        status = "Walking to Aubury";
-                      return ctx.movement.newTilePath(pathToAubury).traverse();
+                        if(ctx.players.local().inCombat()) {
+                            status = "In combat running away...";
+                            ctx.movement.newTilePath(pathToAubury).reverse();
+                        }
+                      return AUBURY_HUT.contains(ctx.players.local().tile());
                     }
                 }, 3000, 10);
 
                 final Npc aubury = ctx.npcs.select().id(AUBURY_NPC).poll();
                 status = "Teleporting from Aubury";
                 //todo if the door is closed open it else interact with Aubury
-                if(ctx.objects.select().id(AUBURY_DOOR).poll().contains(new Point())) {
-
-                    ctx.objects.select().id(AUBURY_DOOR).poll().click();
+                if(ctx.objects.select().id(AUBURY_DOOR_CLOSED).poll().valid()) {
+                    status = "Opening Door";
+                    ctx.objects.select().id(AUBURY_DOOR_CLOSED).poll().click();
                     aubury.interact("Teleport", aubury.name());
                 } else {
                     aubury.interact("Teleport", aubury.name());
@@ -183,5 +181,9 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
         int currentLevel = 0;
         g.drawString(String.valueOf(currentLevel), 86, 123);
         g.drawString(status, 52, 141);
+       Polygon p =  varrockBank.getPolygon();
+        g.setColor(new Color(51, 153, 255));
+        g.draw(p);
+
     }
 }

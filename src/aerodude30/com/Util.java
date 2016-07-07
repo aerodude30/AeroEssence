@@ -1,7 +1,10 @@
 package aerodude30.com;
 
+import org.powerbot.script.AbstractScript;
 import org.powerbot.script.Condition;
 import org.powerbot.script.Random;
+import org.powerbot.script.rt4.ClientContext;
+import org.powerbot.script.rt4.GameObject;
 
 import java.text.DecimalFormat;
 
@@ -10,7 +13,7 @@ import java.text.DecimalFormat;
  * These methods are used for converting, formatting, and calculating data to be displayed for the graphics.
  * The scripts Antipattern methods are also bundled in this class to randomize and humanize the script.
  */
-public class Util extends AeroEssence {
+public class Util extends AbstractScript<ClientContext> {
 
     /**
      * Formats experience gained to be in an hourly format
@@ -72,6 +75,10 @@ public class Util extends AeroEssence {
 
             ctx.widgets.component(548, 55).click();
         }
+    }
+
+    public GameObject getNearest(final int objectId) {
+        return ctx.objects.select().id(objectId).nearest().poll();
     }
 
 
