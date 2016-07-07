@@ -3,7 +3,8 @@
 
 ##Requirements 
 - Completed Rune Mysteries Quest
-- A pickaxe (Bronze through Dragon) wielded by your character or in your inventory
+- A pickaxe (Bronze through Dragon) **that must be** wielded by your character not in your inventory.
+- It is recommended that you are either level 12 in combat or have the ability to defend yourself against a level 6 Mugger who can attack your player on the way to teleport to the Rune Stones.
 
 ## What this script does
 AeroEssence is the Premiere Rune Essence mining script for Old School Runescape. It quickly and effeciently mines and banks
