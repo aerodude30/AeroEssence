@@ -10,6 +10,7 @@ import org.powerbot.script.Tile;
 import org.powerbot.script.rt4.Bank;
 import org.powerbot.script.rt4.ClientContext;
 import org.powerbot.script.rt4.Equipment.Slot;
+import org.powerbot.script.rt4.GameObject;
 import org.powerbot.script.rt4.Npc;
 
 import java.awt.*;
@@ -17,51 +18,61 @@ import java.util.concurrent.Callable;
 
 /**
  * Created by cbartram on 7/6/2016.
- * todo make sure if the client misclicks and ends on the second floor of the bank that it knows the traverse back
- * to the first floor where the bankers are located.
- * test
+ *
  */
-@Script.Manifest(name = "AeroEssence", properties = "author=aerodude30; topic=1296203; client=4;", description = "Mines Rune Essence in east Varrock mine. Supports Bronze-dragon pickaxes.")
+@Script.Manifest(name = "AeroEssence V2", properties = "author=aerodude30; topic=1296203; client=4;", description = "Mines Rune Essence in east Varrock mine. Supports Bronze-dragon pickaxes.")
 public class AeroEssence extends PollingScript<ClientContext> implements PaintListener {
 
     public Controller controller = ctx.controller;
-    private Area varrockBank = new Area(new Tile(3250, 3422, 0), new Tile(3257, 3422, 0), new Tile(3257, 3420, 0), new Tile(3250, 3420, 0));
+
+    private Area VARROCK_BANK  = new Area(new Tile(3250, 3422, 0), new Tile(3257, 3422, 0), new Tile(3257, 3420, 0), new Tile(3250, 3420, 0));
     private Area AUBURY_HUT = new Area(new Tile(3252, 3404, 0), new Tile(3254, 3401, 0), new Tile(3253, 3399, 0), new Tile(3252, 3399, 0));
+    private Tile rndTile = AUBURY_HUT.getRandomTile();
     private static final int[] PICKAXE = {1265, 1267, 1269, 1271, 1273, 1275, 15259};
-    private static final Tile[] pathToAubury = {
-            new Tile(3253, 3404, 0)
+    private final Tile[] pathToAubury = {
+            new Tile(3254, 3425, 0),
+            new Tile(3258, 3411, 0),
+            new Tile(3258, 3405, 0),
+            new Tile(3253, 3399, 0),
+            new Tile(3255, 3398, 0),
+            rndTile
     };
 
-    private static final int RUNE_ESSENCE = 1436, AUBURY_DOOR_OPEN = 11778, AUBURY_DOOR_CLOSED = 11780, AUBURY_NPC = 637, PORTAL = 7475, RUNE_ESSENCE_ROCK = 7471;//todo change to door id
+    private static final int RUNE_ESSENCE = 1436, AUBURY_DOOR_CLOSED = 11780, AUBURY_NPC = 637, PORTAL = 7475, RUNE_ESSENCE_ROCK = 7471, BANK_STAIRS = 11793;
     private long startTime;
     private String status = "Waiting to start...";
     private int startExperience = 0;
+    private final String startingLevel = String.valueOf(ctx.skills.level(14));
 
     //Class instances
     private Random rnd = new Random();
     private Util util = new Util();
 
     //enums for each state in the script
-    private enum State {BANK, TRAVERSE, MINE, REVERSE}
+    private enum State {BANK, TRAVERSE, TELEPORT, MINE, REVERSE, STUCK}
 
     private State getState() {
         //if the player has a pickaxe in their inventory, or equipped, and their backpack does not have Rune ess, and they are standing in the bank
         if((ctx.inventory.select().id(PICKAXE).count() == 1 || ctx.equipment.itemAt(Slot.MAIN_HAND).id() == PICKAXE[0]) &&
-                !ctx.inventory.select().contains(ctx.inventory.select().id(RUNE_ESSENCE).poll()) &&
-                varrockBank.contains(ctx.players.local().tile())) {
+                ctx.inventory.select().id(RUNE_ESSENCE).count() == 0 &&
+                !ctx.objects.select().id(PORTAL).poll().inViewport() && ctx.movement.distance(ctx.players.local().tile(), rndTile) > 3) {
             return State.TRAVERSE;
         }
 
+        if(AUBURY_HUT.contains(ctx.players.local().tile())) {
+            return State.TELEPORT;
+        }
+
+        if(ctx.game.floor() > 1)  {
+            return State.STUCK;
+        }
+
         //if player is in the bank and they have more than one rune essence
-        if(varrockBank.contains(ctx.players.local().tile()) && ctx.inventory.select().id(RUNE_ESSENCE).count() >= 1) {
+        if(VARROCK_BANK.contains(ctx.players.local().tile()) && ctx.inventory.select().id(RUNE_ESSENCE).count() >= 1) {
             return State.BANK;
         }
         //if player has a full inventory of rune essence or a full inventory - 1 because of the pickaxe in their inventory
-        if(ctx.inventory.select().id(RUNE_ESSENCE).count() == 28 || ctx.inventory.select().id(RUNE_ESSENCE).count() == 27) {
-            return State.REVERSE;
-        } else {
-            return State.MINE;
-        }
+        return ctx.inventory.select().id(RUNE_ESSENCE).count() == 28 || ctx.inventory.select().id(RUNE_ESSENCE).count() == 27 ? State.REVERSE : State.MINE;
     }
 
 
@@ -77,7 +88,14 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
     public void poll() {
         State state = getState();
         System.out.println(state);
+        util.dismissRandom();
+
         switch(state) {
+            case STUCK:
+                status = "Oops! Climbing down";
+                ctx.objects.select().id(BANK_STAIRS).nearest().poll().interact("Climb-down", "Staircase");
+                break;
+
             case BANK:
                 status = "Banking...";
                 if(ctx.bank.inViewport() && !ctx.bank.opened()) {
@@ -95,13 +113,12 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
                         banker.interact("Bank", banker.name());
                     }
                     status = "Depositing Essence...";
-                    if (ctx.inventory.count() != 0) {
-                       ctx.bank.deposit(RUNE_ESSENCE, Bank.Amount.ALL);
-                    }
+                    ctx.bank.deposit(RUNE_ESSENCE, Bank.Amount.ALL);
 
-                  ctx.bank.close();
+                    ctx.bank.close();
                 }
                     break;
+
             case TRAVERSE:
                 status = "Walking to Aubury";
                 ctx.movement.newTilePath(pathToAubury).traverse();
@@ -109,42 +126,67 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
                 Condition.wait(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
-                        if(ctx.players.local().inCombat()) {
-                            status = "In combat running away...";
-                            ctx.movement.newTilePath(pathToAubury).reverse();
-                        }
-                      return AUBURY_HUT.contains(ctx.players.local().tile());
+                        System.out.println("Player is in motion sleeping...");
+                        return !ctx.players.local().inMotion();
                     }
-                }, 3000, 10);
+                }, 2500, 10);
 
+                break;
+
+            case TELEPORT:
                 final Npc aubury = ctx.npcs.select().id(AUBURY_NPC).poll();
+                final GameObject door = ctx.objects.select().id(AUBURY_DOOR_CLOSED).poll();
+
                 status = "Teleporting from Aubury";
-                //todo if the door is closed open it else interact with Aubury
-                if(ctx.objects.select().id(AUBURY_DOOR_CLOSED).poll().valid()) {
+
+                if(!ctx.movement.reachable(ctx.players.local().tile(), new Tile(3253, 3404, 0))) {
                     status = "Opening Door";
-                    ctx.objects.select().id(AUBURY_DOOR_CLOSED).poll().click();
-                    aubury.interact("Teleport", aubury.name());
+                    if(door.orientation() == 0) {
+                        ctx.camera.turnTo(door);
+                        ctx.objects.select().id(AUBURY_DOOR_CLOSED).nearest().poll().click();
+                        aubury.interact("Teleport", aubury.name());
+                    }
                 } else {
                     aubury.interact("Teleport", aubury.name());
                 }
+            break;
 
-                break;
             case MINE:
-                //if rune rock is in view interact
-                    //else
-                //move closer
+                GameObject essence = ctx.objects.select().id(RUNE_ESSENCE_ROCK).poll();
+                status = "Mining...";
 
-                //while player animation is mining
-                    //Condition.wait() run antipattern (check your stats, move the camera, examine a widget etc...
+                if (ctx.players.local().animation() == 625 && ctx.inventory.select().id(RUNE_ESSENCE).count() < 27) {
+                    System.out.println("Player is mining, sleeping.");
+                    Condition.sleep();
+                } else {
+                    ctx.movement.step(essence);
+                    Condition.sleep(Random.nextInt(2000, 3000));
+                    ctx.camera.turnTo(essence);
+                    essence.interact("Mine");
+                }
 
                 break;
-            case REVERSE:
-                //if portal is in view interact with it
-                    //else
-                //move closer to the portal then interact with it
 
-                //if player is in Aubury's hut
-                    //ctx.movement.newTilePath(pathToAubury).reverse();
+            case REVERSE:
+                GameObject portal = ctx.objects.select().name("Portal").poll();
+                status = "Returning to Runescape";
+                if(portal.inViewport()) {
+                    portal.interact("Use", portal.name()); //todo might not be use
+                } else {
+                    ctx.movement.step(portal);
+                    Condition.wait(new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return ctx.movement.distance(portal) < 5;
+                        }
+                    }, 1500, 5);
+                    portal.interact("Use", portal.name());
+                }
+                //if player is in Aubury's hut with a full inventory
+                status = "Walking back to bank...";
+                if(AUBURY_HUT.contains(ctx.players.local().tile()) && ctx.inventory.count() >= 27) {
+                    ctx.movement.newTilePath(pathToAubury).reverse();
+                }
                 break;
         }
     }
@@ -176,14 +218,10 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
         g.drawString("Status: ", 16, 141);
         g.drawString(util.runtime(startTime), 85, 49);
         g.drawString(String.valueOf(expGained), 120, 65);
-        g.drawString(util.perHour(expGained, startExperience) + " (" + util.formatNumber(expGained) + ")", 86, 84);
-        g.drawString(String.valueOf(ctx.skills.level(14)), 90, 103);
-        int currentLevel = 0;
-        g.drawString(String.valueOf(currentLevel), 86, 123);
+        g.drawString(util.perHour(expGained, startTime), 86, 84);
+        g.drawString(startingLevel, 90, 103);
+        g.drawString(String.valueOf(ctx.skills.level(14)), 86, 123);
         g.drawString(status, 52, 141);
-       Polygon p =  varrockBank.getPolygon();
-        g.setColor(new Color(51, 153, 255));
-        g.draw(p);
 
     }
 }

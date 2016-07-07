@@ -2,11 +2,13 @@ package aerodude30.com;
 
 import org.powerbot.script.AbstractScript;
 import org.powerbot.script.Condition;
+import org.powerbot.script.Filter;
 import org.powerbot.script.Random;
 import org.powerbot.script.rt4.ClientContext;
-import org.powerbot.script.rt4.GameObject;
+import org.powerbot.script.rt4.Npc;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by cjb on 6/29/2016.
@@ -21,8 +23,8 @@ public class Util extends AbstractScript<ClientContext> {
      * @param startTime the start time of the script
      * @return
      */
-    String perHour(int gained, int startTime) {
-        return formatNumber((int) ((gained) * 3600000D / (System.currentTimeMillis() - startTime)));
+    String perHour(int gained, long startTime) {
+        return formatNumber( (int) ((gained) * 3600000D / (System.currentTimeMillis() - startTime)));
     }
 
     /**
@@ -71,15 +73,32 @@ public class Util extends AbstractScript<ClientContext> {
             ctx.widgets.component(548, 53).click();
             ctx.widgets.component(320, Random.nextInt(1, 20)).hover();
 
-            Condition.sleep(Random.nextInt(600, 800));
+            Condition.sleep(Random.nextInt(2000, 4000));
 
             ctx.widgets.component(548, 55).click();
         }
     }
 
-    public GameObject getNearest(final int objectId) {
-        return ctx.objects.select().id(objectId).nearest().poll();
+    void dismissRandom() {
+        Npc randomNpc = ctx.npcs.select().within(2.0).select(new Filter<Npc>() {
+
+            @Override
+            public boolean accept(Npc npc) {
+                return npc.overheadMessage().contains(ctx.players.local().name());
+            }
+
+        }).poll();
+
+        if (randomNpc.valid()) {
+            String action = randomNpc.name().equalsIgnoreCase("genie") ? "Talk-to" : "Dismiss";
+            if (randomNpc.interact(action)) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep((long) (org.powerbot.script.Random.nextDouble(3, 3.5) * 1000));
+                } catch (InterruptedException e) {
+                    e.getMessage();
+                }
+            }
+
+        }
     }
-
-
 }
