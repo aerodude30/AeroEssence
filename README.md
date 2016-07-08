@@ -4,7 +4,15 @@
 ##Requirements 
 - Completed Rune Mysteries Quest
 - A pickaxe (Bronze through Dragon) **that must be** wielded by your character not in your inventory.
-- It is recommended that you are either level 12 in combat or have the ability to defend yourself against a level 6 Mugger who can attack your player on the way to teleport to the Rune Stones.
+- It is recommended that you are either level 12 in combat or have the ability to defend yourself against a combat level 6 Mugger who can attack your player on the way to teleport to the Rune Stones.
+
+##Features
+- **Misclick correction** (if script misclicks and you end up upstairs in varrock west bank the script will know and travel down the stairs)
+- **Random event dispatches** i.e. When a random event NPC requests your input the script will dismiss him/her to avoid bans.
+- **Comprehensive Anti-Pattern** to avoid detection including but not limited to (Exp Checking, Examining random objects, and checking random tabs)
+- Easy to use and **informative paint** with exp gained, status of the script, exp/hour and even revenue earned! 
+- **Shoo's away stray dogs** which provides an anti-pattern feature and prevents the script from getting stuck on pesky stray dogs! 
+- **Aeroscripts compatible** see below!
 
 ## What this script does
 AeroEssence is the Premiere Rune Essence mining script for Old School Runescape. It quickly and effeciently mines and banks
