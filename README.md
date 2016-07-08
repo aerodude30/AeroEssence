@@ -35,6 +35,10 @@ It allows you to monitor, update, and even command your bot remotely from any co
 View more about Aeroscripts and what it can do for you 
 [here!](http://aeroscripts.com)
 
+##FAQ
+- "Will this script eventually be able to runecraft?"  Yes, currently there is no support for runecrafting but it is a feature that is under development
+- "Why do I have to wield my pickaxe?" It gives you an extra slot for another rune essence/and also provides an extra slot for stuff that random events give you
+
 ##More information 
 You can see the AeroEssence topic on powerbot [here](http://powerbot.org)!
 
