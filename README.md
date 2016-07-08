@@ -5,6 +5,8 @@
 - Completed Rune Mysteries Quest
 - A pickaxe (Bronze through Dragon) **that must be** wielded by your character not in your inventory.
 - It is recommended that you are either level 12 in combat or have the ability to defend yourself against a combat level 6 Mugger who can attack your player on the way to teleport to the Rune Stones.
+- **Must be run if fixed mode** 
+- Script can be started at any point in the Rune essence mining process and will pick up right where you left off (in varrock west bank, upstairs varrock west bank, by the rune essence rock, in Aubury's hut, with or without essence in your inventory etc...)
 
 ##Features
 - **Misclick correction** (if script misclicks and you end up upstairs in varrock west bank the script will know and travel down the stairs)
