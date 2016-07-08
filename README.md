@@ -14,6 +14,8 @@
 - **Comprehensive Anti-Pattern** to avoid detection including but not limited to (Exp Checking, Examining random objects, and checking random tabs)
 - Easy to use and **informative paint** with exp gained, status of the script, exp/hour and even revenue earned! 
 - **Shoo's away stray dogs** which provides an anti-pattern feature and prevents the script from getting stuck on pesky stray dogs! 
+- **Intelligently position camera** to the object or npc you are interacting with.
+- **Support for Bronze through Dragon** pickaxes!
 - **Aeroscripts compatible** see below!
 
 ## What this script does
