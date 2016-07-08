@@ -10,6 +10,7 @@
 
 ##Features
 - **Misclick correction** (if script misclicks and you end up upstairs in varrock west bank the script will know and travel down the stairs)
+- **Doorjam Prevention** if for some reason a player closes the door to Aubury's hut in an attempt to block bots AeroEssence will detect that the door is closed and open it to allow the script to continue!
 - **Random event dispatches** i.e. When a random event NPC requests your input the script will dismiss him/her to avoid bans.
 - **Comprehensive Anti-Pattern** to avoid detection including but not limited to (Exp Checking, Examining random objects, and checking random tabs)
 - Easy to use and **informative paint** with exp gained, status of the script, exp/hour and even revenue earned! 
