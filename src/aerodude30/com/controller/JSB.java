@@ -1,6 +1,7 @@
 package aerodude30.com.controller;
 
 import aerodude30.com.AeroEssence;
+import aerodude30.com.view.GUI;
 import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
@@ -18,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -132,6 +134,10 @@ public class JSB implements aerodude30.com.controller.Actionable {
      * @return JSB object for optional method chaining.
      */
     public JSB initialize(String scriptName, final String version, String status, final String username, final String email, final String API_KEY) {
+
+        if(new GUI().optedOut) {
+            onStop(false);
+        }
         if (notNull(scriptName, version, status, username, email)) {
 
             String sessionID = generateSessionID();
@@ -189,6 +195,11 @@ public class JSB implements aerodude30.com.controller.Actionable {
      * @return JSB object for optional method chaining.
      */
     public JSB setStatus(String status) {
+        try {
+            status = URLEncoder.encode(status, "UTF-8");
+        } catch(UnsupportedEncodingException e) {
+            System.err.println("Status could not be encoded to URL safe status...some data might not be sent correctly");
+        }
         queueInfo.put("Status", status); return this;
     }
 
@@ -473,7 +484,7 @@ public class JSB implements aerodude30.com.controller.Actionable {
                     BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
                     while ((line = in.readLine()) != null) {
-                        System.out.println(line);
+                        System.err.println(line);
                         if (line.equalsIgnoreCase("shutdown") || line.contains("shutdown")) {
                             throw new IOException("Input from User could not being validated with server");
                         }

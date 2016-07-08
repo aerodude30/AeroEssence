@@ -7,6 +7,11 @@ import org.powerbot.script.Random;
 import org.powerbot.script.rt4.ClientContext;
 import org.powerbot.script.rt4.Npc;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
@@ -100,5 +105,38 @@ public class Util extends AbstractScript<ClientContext> {
             }
 
         }
+    }
+
+     int getPrice(int id) {
+         try {
+             URL url = new URL("http://open.tip.it/json/ge_single_item?item=" + id);
+             URLConnection con = url.openConnection();
+             BufferedReader in = new BufferedReader(new InputStreamReader(
+                     con.getInputStream()));
+
+             String line = "";
+             String inputLine;
+
+             while ((inputLine = in.readLine()) != null) {
+                 line += inputLine;
+             }
+
+             in.close();
+
+
+             if (!line.contains("mark_price"))
+                 return -1;
+
+             line = line.substring(line.indexOf("mark_price\":\"")
+                     + "mark_price\":\"".length());
+             line = line.substring(0, line.indexOf("\""));
+
+             line = line.replace(",", "");
+             return Integer.parseInt(line);
+
+         } catch (IOException e) {
+             e.printStackTrace();
+             return 0;
+         }
     }
 }

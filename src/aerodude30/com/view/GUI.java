@@ -20,6 +20,8 @@ public class GUI extends JDialog {
     private JButton signUp;
     private JCheckBox rememberMe;
 
+    public boolean optedOut = false;
+
     public GUI() {
         setContentPane(contentPane);
         setModal(true);
@@ -117,9 +119,9 @@ public class GUI extends JDialog {
     }
 
     private void onCancel() {
-        dispose();
         System.err.println("[Error] User opted out of Aeroscripts feature");
-        System.exit(0);
+        dispose();
+        optedOut = true;
     }
 
 
