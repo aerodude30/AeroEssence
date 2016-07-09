@@ -5,6 +5,7 @@ import org.powerbot.script.Condition;
 import org.powerbot.script.Filter;
 import org.powerbot.script.Random;
 import org.powerbot.script.rt4.ClientContext;
+import org.powerbot.script.rt4.GameObject;
 import org.powerbot.script.rt4.Npc;
 
 import java.io.BufferedReader;
@@ -68,25 +69,44 @@ public class Util extends AbstractScript<ClientContext> {
     }
 
     /**
-     * Performs a different anti-pattern action based on the input in order to randomize
-     * the script and give it human like qualities.
-     * @param type The anti-pattern action to perform
+     * Performs a different anti-pattern action sometimes but not every time
+     * to give the bot a more humanlike appearence.
      */
-    void antiPattern(String type) {
-        if(type.equalsIgnoreCase("CHECK_SKILLS")) {
-            //open skill tab and hover over the random skill
-            ctx.widgets.component(548, 53).click();
-            ctx.widgets.component(320, Random.nextInt(1, 20)).hover();
+    void antiPattern() {
+        int rnd = Random.nextInt(0, 50);
+        System.out.println(rnd);
+        switch(rnd) {
+            case 5:
+                ctx.widgets.component(548, 53).click();
+                ctx.widgets.component(320, Random.nextInt(1, 20)).hover();
 
-            Condition.sleep(Random.nextInt(2000, 4000));
+                Condition.sleep(Random.nextInt(2000, 4000));
 
-            ctx.widgets.component(548, 55).click();
+                ctx.widgets.component(548, 55).click();
+                break;
+
+            case 10:
+               GameObject object = ctx.objects.select().within(6.0).poll();
+               if(object.inViewport()) {
+                   object.interact("Examine", object.name());
+               } else {
+                   ctx.camera.turnTo(object);
+                   object.interact("Examine", object.name());
+               }
+                break;
+
+            case 40:
+                ctx.camera.angleTo(Random.nextInt(0, 180));
+                break;
+            default:
+                break;
+
         }
     }
 
     void dismissRandom() {
+        /* Credit to @laputa.  URL: https://www.powerbot.org/community/topic/1292825-random-event-dismisser/  */
         Npc randomNpc = ctx.npcs.select().within(2.0).select(new Filter<Npc>() {
-
             @Override
             public boolean accept(Npc npc) {
                 return npc.overheadMessage().contains(ctx.players.local().name());
@@ -98,7 +118,7 @@ public class Util extends AbstractScript<ClientContext> {
             String action = randomNpc.name().equalsIgnoreCase("genie") ? "Talk-to" : "Dismiss";
             if (randomNpc.interact(action)) {
                 try {
-                    TimeUnit.MILLISECONDS.sleep((long) (org.powerbot.script.Random.nextDouble(3, 3.5) * 1000));
+                    TimeUnit.MILLISECONDS.sleep((long) (Random.nextDouble(3, 3.5) * 1000));
                 } catch (InterruptedException e) {
                     e.getMessage();
                 }

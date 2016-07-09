@@ -24,6 +24,10 @@ import java.util.concurrent.Callable;
 @Script.Manifest(name = "AeroEssence", properties = "author=aerodude30; topic=1296203; client=4;", description = "Intelligent East Varrock Rune Essence Miner.")
 public class AeroEssence extends PollingScript<ClientContext> implements PaintListener {
 
+    //Class instances
+    private Random rnd = new Random();
+    private Util util = new Util();
+
     public Controller controller = ctx.controller;
     private Tile rndTile = AUBURY_HUT.getRandomTile();
     private final Tile[] pathToAubury = {
@@ -56,56 +60,37 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
     private static Area AUBURY_HUT = new Area(new Tile(3252, 3404, 0), new Tile(3254, 3401, 0), new Tile(3253, 3399, 0), new Tile(3252, 3399, 0));
     private static final int[] DOOR_BOUNDS = {12, 136, -228, -4, -20, 48};
 
-    //Class instances
-    private Random rnd = new Random();
-    private Util util = new Util();
-
     //enums for each state in the script
     private enum State {BANK, TRAVERSE, TELEPORT, MINE, REVERSE, STUCK, STRAY_DOG}
 
+    //returns the state of the script
     private State getState() {
 
-        if((ctx.inventory.select().id(PICKAXE).count() == 1 || ctx.equipment.itemAt(Slot.MAIN_HAND).id() == PICKAXE[0]) &&
+        if((ctx.inventory.select().id(PICKAXE).count() == 1 || contains(PICKAXE, ctx.equipment.itemAt(Slot.MAIN_HAND).id())) &&
                 ctx.inventory.select().id(RUNE_ESSENCE).count() == 0 &&
-                !ctx.objects.select().id(PORTAL).poll().inViewport() && ctx.movement.distance(ctx.players.local().tile(), rndTile) > 3
+                !ctx.objects.select().id(PORTAL).poll().inViewport() && ctx.movement.distance(ctx.players.local().tile(), rndTile) >= 3
                 && !ctx.npcs.select().id(STRAY_DOG).nearest().poll().inViewport()) {
             return State.TRAVERSE;
         }
 
-        if(AUBURY_HUT.contains(ctx.players.local().tile()) && ctx.inventory.select().id(RUNE_ESSENCE).count() == 0) {
-            return State.TELEPORT;
-        }
+        if(AUBURY_HUT.contains(ctx.players.local().tile()) && ctx.inventory.select().id(RUNE_ESSENCE).count() == 0) { return State.TELEPORT; }
 
-        if(ctx.players.local().tile().floor() >= 1)  {
-            return State.STUCK;
-        }
+        if(ctx.players.local().tile().floor() >= 1)  { return State.STUCK; }
 
-        if(ctx.movement.distance(ctx.players.local(), ctx.npcs.select().id(STRAY_DOG).poll()) <= 2 && ctx.npcs.select().id(STRAY_DOG).poll().inViewport()) {
-            return State.STRAY_DOG;
-        }
+        if(ctx.movement.distance(ctx.players.local(), ctx.npcs.select().id(STRAY_DOG).poll()) <= 2 && ctx.npcs.select().id(STRAY_DOG).poll().inViewport()) { return State.STRAY_DOG; }
 
-        //if player is in the bank and they have more than one rune essence
-        if(VARROCK_BANK.contains(ctx.players.local().tile()) && ctx.inventory.select().id(RUNE_ESSENCE).count() >= 1) {
-            return State.BANK;
-        }
-        //if player has a full inventory of rune essence or a full inventory - 1 because of the pickaxe in their inventory
+        if(VARROCK_BANK.contains(ctx.players.local().tile()) && ctx.inventory.select().id(RUNE_ESSENCE).count() >= 1) { return State.BANK; }
+
         return ctx.inventory.select().id(RUNE_ESSENCE).count() == 28 || ctx.inventory.select().id(RUNE_ESSENCE).count() == 27 ? State.REVERSE : State.MINE;
     }
 
-    /**
-     * Aeroscripts custom script action button when custom action button
-     * is pressed via the web app
-     */
-    private void customAction() {
-        if(ctx.players.local().inCombat()) {
-            //run from mugger
+    private boolean contains(int[] arr, int value) {
+        for(int anArr : arr) {
+            return anArr == value;
         }
+        return false;
     }
 
-    /**
-     * Aeroscripts method to bank when bank button is pressed via the web app
-     */
-    public void actionBank() { }
 
     @Override
     public void start() {
@@ -155,16 +140,11 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
                     }
                 } else {
                     status = "Depositing Essence...";
-                    /*
-                    if(ctx.inventory.select().id(RUNE_ESSENCE).count() <= 27) {
-                        ctx.bank.depositInventory();
-                    }
-                    */
-                    ctx.bank.depositAllExcept(PICKAXE[0], PICKAXE[1]);
+
+                    ctx.bank.depositInventory();
 
                     ctx.bank.close();
                     essenceMined += 27;
-
                 }
 
                     break;
@@ -207,6 +187,7 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
                 status = "Mining...";
 
                 if (ctx.players.local().animation() == 625 && ctx.inventory.select().id(RUNE_ESSENCE).count() < 27) {
+                    util.antiPattern();
                     Condition.sleep();
                 } else {
                     ctx.movement.step(essence);
