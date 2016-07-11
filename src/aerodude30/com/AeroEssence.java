@@ -28,7 +28,6 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
     private Random rnd = new Random();
     private Util util = new Util();
 
-    public Controller controller = ctx.controller;
     private Tile rndTile = AUBURY_HUT.getRandomTile();
     private final Tile[] pathToAubury = {
             new Tile(3254, 3425, 0),
@@ -45,14 +44,14 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
         VARROCK_BANK.getRandomTile()
     };
 
-    //variables
+    //Variables
     private int essenceMined = 0;
     private long startTime;
     private String status = "Waiting to start...";
     private int startExperience = 0;
-    private final String startingLevel = String.valueOf(ctx.skills.level(14));
 
-    //constants
+    //Constants
+    private final String START_LEVEL = String.valueOf(ctx.skills.level(14));
     private static final int RUNE_ESSENCE = 1436, AUBURY_DOOR_CLOSED = 11780, AUBURY_NPC = 637, RUNE_ESSENCE_ROCK = 7471, BANK_STAIRS = 11793, STRAY_DOG= 2902;
     private static final int[] PORTAL =  {7472, 7473, 7475, 7477, 7479, 7474, 7476, 7480};
     private static final int[] PICKAXE = {1265, 1267, 1269, 1271, 1273, 1275, 15259};
@@ -60,10 +59,13 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
     private static Area AUBURY_HUT = new Area(new Tile(3252, 3404, 0), new Tile(3254, 3401, 0), new Tile(3253, 3399, 0), new Tile(3252, 3399, 0));
     private static final int[] DOOR_BOUNDS = {12, 136, -228, -4, -20, 48};
 
-    //enums for each state in the script
+    //Enumerations for each State in the script
     private enum State {BANK, TRAVERSE, TELEPORT, MINE, REVERSE, STUCK, STRAY_DOG}
 
-    //returns the state of the script
+    /**
+     *Returns the current state of the script
+     * @return State Returns a state object for the currently active state in the script
+     */
     private State getState() {
 
         if((ctx.inventory.select().id(PICKAXE).count() == 1 || contains(PICKAXE, ctx.equipment.itemAt(Slot.MAIN_HAND).id())) &&
@@ -84,9 +86,17 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
         return ctx.inventory.select().id(RUNE_ESSENCE).count() == 28 || ctx.inventory.select().id(RUNE_ESSENCE).count() == 27 ? State.REVERSE : State.MINE;
     }
 
+    /**
+     * Iterates through an array to see if a specific value is contained in the array
+     * @param arr Array to iterate through
+     * @param value value to search for
+     * @return true if the value was found otherwise false
+     */
     private boolean contains(int[] arr, int value) {
         for(int anArr : arr) {
-            return anArr == value;
+            if(anArr == value) {
+                return true;
+            }
         }
         return false;
     }
@@ -102,15 +112,18 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
     public void poll() {
         State state = getState();
         util.dismissRandom();
+        GameObject hutDoor = ctx.objects.select().id(AUBURY_DOOR_CLOSED).each(Interactive.doSetBounds(DOOR_BOUNDS)).nearest().poll();
 
         switch(state) {
             case STUCK:
+                //if there was a misclick and the player ended up on the second floor of the bank.
                 status = "Oops! Climbing down";
                 ctx.objects.select().id(BANK_STAIRS).nearest().poll().interact("Climb-down", "Staircase");
                 Condition.sleep(Random.nextInt(500, 1000));
                 break;
 
             case STRAY_DOG:
+                //shoo's away stray dog which could potentially block the player in a location.
                 status = "Shooing stray dog";
                 final Npc strayDog = ctx.npcs.select().id(STRAY_DOG).nearest().poll();
                     strayDog.interact("Shoo-away", strayDog.name());
@@ -164,16 +177,15 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
 
             case TELEPORT:
                 final Npc aubury = ctx.npcs.select().id(AUBURY_NPC).poll();
-                final GameObject door = ctx.objects.select().id(AUBURY_DOOR_CLOSED).poll();
-
                 status = "Teleporting from Aubury";
 
-                //player is stuck inside or outside aubury's hut
+                //Player is stuck inside or outside Aubury's hut
                 if(!ctx.movement.reachable(ctx.players.local().tile(), new Tile(3253, 3404, 0))) {
                     status = "Opening Door";
-                    if(door.orientation() == 0) {
-                        ctx.camera.turnTo(door);
-                        ctx.objects.select().id(AUBURY_DOOR_CLOSED).nearest().poll().click();
+                    final GameObject closedDoor = ctx.objects.select().id(AUBURY_DOOR_CLOSED).poll();
+                    if(closedDoor.valid()) {
+                        ctx.camera.turnTo(hutDoor);
+                        closedDoor.click();
                         aubury.interact("Teleport", aubury.name());
                     }
                 } else {
@@ -186,6 +198,7 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
                 GameObject essence = ctx.objects.select().id(RUNE_ESSENCE_ROCK).nearest().poll();
                 status = "Mining...";
 
+                //While the player is mining, run the anti-pattern and sleep
                 if (ctx.players.local().animation() == 625 && ctx.inventory.select().id(RUNE_ESSENCE).count() < 27) {
                     util.antiPattern();
                     Condition.sleep();
@@ -200,14 +213,12 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
 
             case REVERSE:
                 GameObject portal = ctx.objects.select().id(PORTAL).nearest().poll();
-                GameObject hutDoor = ctx.objects.select().id(AUBURY_DOOR_CLOSED).each(Interactive.doSetBounds(DOOR_BOUNDS)).nearest().poll();
-
                 status = "Returning to Runescape";
 
                 if(!ctx.movement.reachable(ctx.players.local().tile(), new Tile(3253, 3398, 0))) {
                 status = "Door is closed, opening...";
 
-                if(hutDoor.valid()) {
+                if(hutDoor.valid() && !hutDoor.inViewport()) {
                     ctx.camera.turnTo(hutDoor);
                     hutDoor.click(true);
                     }
@@ -262,7 +273,7 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
         g.drawString(util.runtime(startTime), 85, 49);
         g.drawString(String.valueOf(expGained), 110, 65);//
         g.drawString(util.perHour(expGained, startTime), 76, 84);//
-        g.drawString(startingLevel, 87, 103);
+        g.drawString(START_LEVEL, 87, 103);
         g.drawString(String.valueOf(ctx.skills.level(14)), 86, 123);
         g.drawString(status, 52, 141);
         g.drawString(String.valueOf(essenceMined), 96, 159);
