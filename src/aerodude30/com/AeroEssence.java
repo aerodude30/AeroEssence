@@ -258,7 +258,6 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
         g.drawLine(x, y - 5, x, y + 5);
         g.drawLine(x - 5, y, x + 5, y);
 
-
         int expGained = ctx.skills.experience(14) - startExperience;
         g.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF));
         g.setColor(new Color(136, 136, 136, 117));
