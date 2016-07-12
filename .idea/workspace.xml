@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f3bd5d72-e3ea-43de-ad04-23182b87a257" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aerodude30/com/AeroEssence.java" afterPath="$PROJECT_DIR$/src/aerodude30/com/AeroEssence.java" />
     </list>
     <ignored path="AeroEssence.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,8 +29,8 @@
       <file leaf-file-name="AeroEssence.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/aerodude30/com/AeroEssence.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="413">
-              <caret line="258" column="39" selection-start-line="258" selection-start-column="39" selection-end-line="258" selection-end-column="39" />
+            <state relative-caret-position="634">
+              <caret line="271" column="45" selection-start-line="271" selection-start-column="45" selection-end-line="271" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -515,7 +516,7 @@
       <workItem from="1467922653758" duration="14000" />
       <workItem from="1467922733441" duration="33513000" />
       <workItem from="1468241809527" duration="6447000" />
-      <workItem from="1468329030063" duration="4913000" />
+      <workItem from="1468329030063" duration="5018000" />
     </task>
     <task id="LOCAL-00001" summary="test commit">
       <created>1467838406352</created>
@@ -538,11 +539,18 @@
       <option name="project" value="LOCAL" />
       <updated>1468339155943</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added mouse paint">
+      <created>1468339222942</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1468339222942</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="89018000" />
+    <option name="totallyTimeSpent" value="89123000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -699,8 +707,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/aerodude30/com/AeroEssence.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="258" column="39" selection-start-line="258" selection-start-column="39" selection-end-line="258" selection-end-column="39" />
+        <state relative-caret-position="634">
+          <caret line="271" column="45" selection-start-line="271" selection-start-column="45" selection-end-line="271" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
