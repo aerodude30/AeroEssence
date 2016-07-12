@@ -2,11 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3bd5d72-e3ea-43de-ad04-23182b87a257" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/aerodude30/com/view/GUI.form" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/aerodude30/com/view/GUI.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/aerodude30/com/view/GUI$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/aerodude30/com/view/GUI.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/aerodude30/com/AeroEssence$1.class" afterPath="$PROJECT_DIR$/bin/aerodude30/com/AeroEssence$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/aerodude30/com/AeroEssence$2.class" afterPath="$PROJECT_DIR$/bin/aerodude30/com/AeroEssence$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/aerodude30/com/AeroEssence$3.class" afterPath="$PROJECT_DIR$/bin/aerodude30/com/AeroEssence$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/aerodude30/com/AeroEssence$State.class" afterPath="$PROJECT_DIR$/bin/aerodude30/com/AeroEssence$State.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/aerodude30/com/AeroEssence.class" afterPath="$PROJECT_DIR$/bin/aerodude30/com/AeroEssence.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/aerodude30/com/Util$1.class" afterPath="$PROJECT_DIR$/bin/aerodude30/com/Util$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/aerodude30/com/Util.class" afterPath="$PROJECT_DIR$/bin/aerodude30/com/Util.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aerodude30/com/AeroEssence.java" afterPath="$PROJECT_DIR$/src/aerodude30/com/AeroEssence.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aerodude30/com/Util.java" afterPath="$PROJECT_DIR$/src/aerodude30/com/Util.java" />
     </list>
     <ignored path="AeroEssence.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,8 +38,8 @@
       <file leaf-file-name="AeroEssence.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/aerodude30/com/AeroEssence.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-724">
-              <caret line="214" column="85" selection-start-line="214" selection-start-column="85" selection-end-line="214" selection-end-column="85" />
+            <state relative-caret-position="311">
+              <caret line="252" column="32" selection-start-line="252" selection-start-column="32" selection-end-line="252" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -44,10 +50,13 @@
       <file leaf-file-name="Util.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/aerodude30/com/Util.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="546">
+            <state relative-caret-position="1377">
               <caret line="83" column="30" selection-start-line="83" selection-start-column="30" selection-end-line="83" selection-end-column="30" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#1063#1064#0" expanded="false" />
+                <element signature="e#1171#1172#0" expanded="false" />
+                <element signature="e#3697#3698#0" expanded="false" />
+                <element signature="e#3794#3795#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -156,6 +165,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -194,8 +205,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -515,7 +524,8 @@
       <workItem from="1467896209005" duration="15803000" />
       <workItem from="1467922653758" duration="14000" />
       <workItem from="1467922733441" duration="33513000" />
-      <workItem from="1468241809527" duration="2814000" />
+      <workItem from="1468241809527" duration="6447000" />
+      <workItem from="1468329030063" duration="4837000" />
     </task>
     <task id="LOCAL-00001" summary="test commit">
       <created>1467838406352</created>
@@ -524,11 +534,18 @@
       <option name="project" value="LOCAL" />
       <updated>1467838406352</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Final touches and features (all pickaxes supported etc)">
+      <created>1468250823066</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1468250823066</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="80472000" />
+    <option name="totallyTimeSpent" value="88942000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -546,7 +563,6 @@
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10714286" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294702" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -559,6 +575,7 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39983442" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294702" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -574,7 +591,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="test commit" />
+    <MESSAGE value="Final touches and features (all pickaxes supported etc)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Final touches and features (all pickaxes supported etc)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -599,10 +617,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/aerodude30/com/Util.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1377">
+          <caret line="83" column="30" selection-start-line="83" selection-start-column="30" selection-end-line="83" selection-end-column="30" />
+          <folding>
+            <element signature="e#1063#1064#0" expanded="false" />
+            <element signature="e#1171#1172#0" expanded="false" />
+            <element signature="e#3697#3698#0" expanded="false" />
+            <element signature="e#3794#3795#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aerodude30/com/AeroEssence.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aerodude30/com/Util.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1666">
           <caret line="100" column="20" selection-start-line="100" selection-start-column="20" selection-end-line="100" selection-end-column="20" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#1063#1064#0" expanded="false" />
+            <element signature="e#1171#1172#0" expanded="false" />
+            <element signature="e#3697#3698#0" expanded="false" />
+            <element signature="e#3794#3795#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -622,24 +666,16 @@
         <state relative-caret-position="345">
           <caret line="29" column="7" selection-start-line="29" selection-start-column="7" selection-end-line="29" selection-end-column="7" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#1063#1064#0" expanded="false" />
+            <element signature="e#1171#1172#0" expanded="false" />
+            <element signature="e#3697#3698#0" expanded="false" />
+            <element signature="e#3794#3795#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/aerodude30/com/view/GUI.form">
-      <provider selected="true" editor-type-id="ui-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/aerodude30/com/view/GUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="586">
-          <caret line="123" column="24" selection-start-line="123" selection-start-column="24" selection-end-line="123" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aerodude30/com/view/GUI.form" />
+    <entry file="file://$PROJECT_DIR$/src/aerodude30/com/view/GUI.java" />
     <entry file="file://$PROJECT_DIR$/src/aerodude30/com/Constants.java" />
     <entry file="file://$PROJECT_DIR$/user_creds.txt">
       <provider selected="true" editor-type-id="text-editor">
@@ -652,18 +688,21 @@
     <entry file="file://$PROJECT_DIR$/src/aerodude30/com/controller/JSB.java" />
     <entry file="file://$PROJECT_DIR$/src/aerodude30/com/Util.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="546">
+        <state relative-caret-position="1377">
           <caret line="83" column="30" selection-start-line="83" selection-start-column="30" selection-end-line="83" selection-end-column="30" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#1063#1064#0" expanded="false" />
+            <element signature="e#1171#1172#0" expanded="false" />
+            <element signature="e#3697#3698#0" expanded="false" />
+            <element signature="e#3794#3795#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/aerodude30/com/AeroEssence.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-724">
-          <caret line="214" column="85" selection-start-line="214" selection-start-column="85" selection-end-line="214" selection-end-column="85" />
+        <state relative-caret-position="311">
+          <caret line="252" column="32" selection-start-line="252" selection-start-column="32" selection-end-line="252" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

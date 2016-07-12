@@ -106,6 +106,7 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
     public void start() {
         startTime = System.currentTimeMillis();
         startExperience = ctx.skills.experience(14);
+
     }
 
     @Override
@@ -248,6 +249,16 @@ public class AeroEssence extends PollingScript<ClientContext> implements PaintLi
     @Override
     public void repaint(Graphics graphics) {
         Graphics2D g = (Graphics2D) graphics;
+
+        g.setColor(new Color(222, 219, 220));
+        final Point pt =  ctx.input.getLocation();
+        int x = (int) pt.getX();
+        int y = (int) pt.getY();
+        g.drawOval(pt.x - 8, pt.y - 8, 15, 15);
+        g.drawLine(x, y - 5, x, y + 5);
+        g.drawLine(x - 5, y, x + 5, y);
+
+
         int expGained = ctx.skills.experience(14) - startExperience;
         g.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF));
         g.setColor(new Color(136, 136, 136, 117));
