@@ -74,7 +74,6 @@ public class Util extends AbstractScript<ClientContext> {
      */
     void antiPattern() {
         int rnd = Random.nextInt(0, 50);
-        System.out.println(rnd);
         switch(rnd) {
             case 5:
                 ctx.widgets.component(548, 53).click();

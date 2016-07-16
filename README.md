@@ -11,12 +11,14 @@
 ##Features
 - **Misclick correction** (if script misclicks and you end up upstairs in varrock west bank the script will know and travel down the stairs)
 - **Doorjam Prevention** if for some reason a player closes the door to Aubury's hut in an attempt to block bots AeroEssence will detect that the door is closed and open it to allow the script to continue!
-- **Random event dispatches** i.e. When a random event NPC requests your input the script will dismiss him/her to avoid bans.
-- **Comprehensive Anti-Pattern** to avoid detection including but not limited to (Exp Checking, Examining random objects, and checking random tabs)
+- **Random event dispatches** i.e. When a random event NPC requests your input the script will dismiss him/her to avoid bans. AerosEssence also knows and interacts with the random NPC if he/she simply wants to talk to you and give you coins/gems/etc rather than an actual random event. 
+- **Comprehensive Anti-Pattern** to avoid detection including but not limited to (Exp Checking, Examining random objects, changing the pitch of the camera and checking random tabs)
 - Easy to use and **informative paint** with exp gained, status of the script, exp/hour and even revenue earned! 
 - **Shoo's away stray dogs** which provides an anti-pattern feature and prevents the script from getting stuck on pesky stray dogs! 
 - **Intelligently position camera** to the object or npc you are interacting with.
 - **Support for Bronze through Dragon** pickaxes!
+
+Coming soon! 
 - **Aeroscripts compatible** see below!
 
 ## What this script does
@@ -28,7 +30,7 @@ AeroEssence was created because there are several broken, poorly coded, and inef
 AeroEssence is able to **intelligently and consistently** mine rune essence without making a mistake, getting stuck, or endangering 
 your account with poor code practices.
 
-AeroEssence is one of the first script on the SDN to integrate Aeroscripts into its code! 
+AeroEssence will be one of the first script on the SDN to integrate Aeroscripts into its code! 
 Aeroscripts is a bot viewer, real time analytics engine, and remote controller for your powerbot script.
 It allows you to monitor, update, and even command your bot remotely from any computer! 
 
