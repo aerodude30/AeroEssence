@@ -95,9 +95,17 @@ public class Util extends AbstractScript<ClientContext> {
                }
                 break;
 
-            case 40:
-                ctx.camera.angleTo(Random.nextInt(0, 180));
+            case 15:
+                ctx.camera.pitch(Random.nextInt(0, 90));
                 break;
+            case 20:
+                if(ctx.movement.energyLevel() > Random.nextInt(50, 100)) {
+                    ctx.movement.running(true);
+                } else {
+                    break;
+                }
+                break;
+
             default:
                 break;
 
@@ -156,7 +164,7 @@ public class Util extends AbstractScript<ClientContext> {
 
          } catch (IOException e) {
              e.printStackTrace();
-             return 0;
+             return -1;
          }
     }
 }
